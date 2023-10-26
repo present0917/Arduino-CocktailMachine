@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+ 
+  <head>
+       
+        <title>Node.Js LED Control</title>
+        <meta name="viewport" content="width=400px" />
+        <script src="socket.io/socket.io.js"></script>
+        <!-- socket io 라이브러리 로드하고 -->
+        <link rel="stylesheet" href="style.css">
+	</head>
+
+  <body>
+     
+	<p>Move Slider to Change Brightness of LED</p> 
+	<input type="range" id= "inputSlider"  min="0" max="255" value="50" step="1" oninput="showValue(this.value)" />
+        <!-- 이벤트 발생하면 SHOWVALUE 함수실행 -->
+	<br><br>
+	<span id="outputText">50</span>
+    
+        <script type="text/javascript">
+                var socket = io.connect();
+                //주소 지정할 필요 없는데 기본값이 페이지 제공 호스트를 따라가기 때문이라고 함.
+               
+                socket.on('led', function (data) {
+                        document.getElementById("inputSlider").value = data.value;
+                        document.getElementById("outputText").innerHTML = data.value;
+                });
+               
+                function showValue(newValue)
+                {
+                        document.getElementById("outputText").innerHTML=newValue;
+                        socket.emit('led', { value: newValue });
+                        //실행되면 인자로 받은 값 이용해서 HTML 요소 값 바꿔준 다음
+                        //socket io 통신으로 서버에 값을 보내준다.
+                        //이벤트명은 led, 객체로서 만들어서 수정된 값을 value 항목에넣는다.
+                }
+        </script>
+  </body>
+</html>
