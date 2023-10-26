@@ -1,0 +1,13 @@
+node.js와 프레임워크 express.js로 웹서버.
+↓
+socket.io 라이브러리 통해 프론트엔드와 백엔드 사이 데이터 교환 
+(그 사이에서 교환되는 데이터를 아두이노가 연결된 포트로 전송하는 시리얼통신이 이루어짐)
+↓
+그 데이터를 읽은 아두이노로 해당 데이터에 맞는 작업 처리.
+
+출처남길링크
+https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+
+https://socket.io/get-started/chat#the-web-framework
+
+https://www.engineersgarage.com/how-to-build-a-node-js-server-to-control-arduino-from-a-webpage/

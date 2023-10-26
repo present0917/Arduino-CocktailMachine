@@ -1,4 +1,4 @@
-char command;
+int command;
 void setup()
 {
   Serial.begin(9600);
@@ -11,19 +11,20 @@ void loop()
 {
   while(!Serial.available());  
   command=Serial.read();
-  if(command=='a')
+  Serial.println(command);
+  if(command==1)
   {
     digitalWrite(3,HIGH);
   }
-  else if(command=='b')
+  else if(command==2)
   {
     digitalWrite(4,HIGH);
   }
-  else if(command=='c')
+  else if(command==3)
   {
     digitalWrite(3,LOW);
   }
-  else if(command=='d')
+  else if(command==4)
   {
     digitalWrite(4,LOW);
   }

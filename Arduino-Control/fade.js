@@ -5,7 +5,7 @@ const server = http.createServer(app);
 
 const { Server } = require("socket.io");
 const io = new Server(server);
-
+const { Buffer } = require('node:buffer');
 const { SerialPort } = require('serialport');
 const port = new SerialPort({
   path: 'COM5',
@@ -32,12 +32,24 @@ io.on('connection', (socket) => {
   console.log('연결확인메시지')
   socket.on('led', function (data) {
     //또다른 이벤트핸들러 -> 'led'라는 이벤트를 수신하면 실행
-                var brightness = data.value;
+                var command = data.value;
+                console.log(command)
                 var buf = new Buffer.alloc(1);
-                buf.writeUInt8(brightness, 0);
+                buf.writeUInt8(command, 0);
+
+                /*
+                var buf = Buffer.from(command, 'utf8');
+                문자받으려고 시도했던거
+                https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+                */
+                
+                console.log(buf)
                 port.write(buf);
+                //이부분이 실제로 아두이노에 시리얼로 값을 보낸다.
 				
 				io.sockets.emit('led', {value: brightness});   
+        //여기서 클라이언트로 변경사항을 보내주는데
+        //여기서 html파일의 socket.on 부분이 이벤트 수신후 실행됨.
         });
         socket.emit('led', {value: brightness});
 });
