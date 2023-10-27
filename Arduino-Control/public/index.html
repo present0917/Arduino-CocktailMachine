@@ -7,24 +7,31 @@
         <meta name="viewport" content="width=400px" />
         <script src="socket.io/socket.io.js"></script>
         <!-- socket io 라이브러리 로드하고 -->
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <!-- 부트스트랩 -->
        
 	</head>
 
-  <body>
-     
-	<p>주문할 음료를 골라주세요</p> 
+  <body style="text-align: center;">
+        
+	<h1 >주문할 음료를 골라주세요</h1>
 	<!-- <input type="range" id= "inputSlider"  min="0" max="255" value="50" step="1" oninput="showValue(this.value)" /> -->
         <!-- <button onclick='showValue(1)'>1번</button>
         <button onclick='showValue(3)'>3번</button> -->
-        <button><img src="/media/woowoo.jpg" width="100px"/><div>woo woo</div></div></button>
-        <button><img src="/media/gintonic.jpg" width="100px"/><div>진토닉</div></button>
-        <button><img src="/media/rumcock.jpg" width="100px"/><div>럼콕</div></button>
-        <button><img src="/media/screwdriver.jpg" width="100px"/><div>스크류드라이버</div></button>
-        <button><img src="/media/stir.jpg" width="100px"/><div>섞기</div></button>
+
+        <button class="btn btn-primary"><img src="/media/woowoo.jpg" width="100px" height="100px"/><div>woo woo</div></button>
+        <button class="btn btn-primary"><img src="/media/gintonic.jpg" width="100px" height="100px"/><div>진토닉</div></button>
+        <button class="btn btn-primary"><img src="/media/rumcock.jpg" width="100px" height="100px"/><div>럼콕</div></button>
+        <button class="btn btn-primary"><img src="/media/screwdriver.jpg" width="100px" height="100px"/><div>스크류드라이버</div></button>
+        <button class="btn btn-primary"><img src="/media/stir.jpg" width="100px" height="100px"/><div>섞기</div></button>
         <!-- 이벤트 발생하면 SHOWVALUE 함수실행 -->
-	<br><br>
-	<span id="humidity">test</span>
-        <span id="temperature">test</span>
+	<br>
+     
+
+	<div id="humidity">test</div>
+        <div id="temperature">test</div>
+
         <script type="text/javascript">
                 var socket = io.connect();
                 //주소 지정할 필요 없는데 기본값이 페이지 제공 호스트를 따라가기 때문이라고 함.

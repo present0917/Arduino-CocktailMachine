@@ -18,6 +18,10 @@ https://stackoverflow.com/questions/37486885/displaying-local-images-in-static-h
 
 https://dev.to/eckhardtd/downloading-images-in-the-browser-with-node-js-4f0h
 
+https://stackoverflow.com/questions/49891373/how-can-i-add-bootstrap-to-a-project-in-expressjs(부트스트랩 설치)
+
+https://getbootstrap.com/docs/4.0/components/alerts/
+
 이미지출처
 https://www.cocktailcontessa.com/how-to-stir-a-cocktail/
 

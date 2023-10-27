@@ -17,6 +17,8 @@ const port = new SerialPort({
 
 var brightness = 0;
 
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+//부트스트랩
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname +'/public/index.html');
