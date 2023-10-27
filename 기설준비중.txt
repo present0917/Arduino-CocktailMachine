@@ -5,9 +5,20 @@ socket.io 라이브러리 통해 프론트엔드와 백엔드 사이 데이터 �
 ↓
 그 데이터를 읽은 아두이노로 해당 데이터에 맞는 작업 처리.
 
-출처남길링크
+발췌
 https://nodejs.org/api/buffer.html#buffers-and-character-encodings
 
 https://socket.io/get-started/chat#the-web-framework
 
 https://www.engineersgarage.com/how-to-build-a-node-js-server-to-control-arduino-from-a-webpage/
+
+https://stackoverflow.com/questions/18908584/displaying-a-simple-image-in-expressjs
+
+https://stackoverflow.com/questions/37486885/displaying-local-images-in-static-html-served-by-nodejs
+
+https://dev.to/eckhardtd/downloading-images-in-the-browser-with-node-js-4f0h
+
+이미지출처
+https://www.cocktailcontessa.com/how-to-stir-a-cocktail/
+
+https://www.liquor.com/recipes/
