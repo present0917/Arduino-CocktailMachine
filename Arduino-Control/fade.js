@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-
 const { Server } = require("socket.io");
 const io = new Server(server);
 const { Buffer } = require('node:buffer');
 const { SerialPort } = require('serialport');
+
+
+
 const port = new SerialPort({
   path: 'COM5',
   baudRate: 9600,
@@ -19,6 +21,14 @@ var brightness = 0;
 app.get('/', (req, res) => {
   res.sendFile(__dirname +'/public/index.html');
 });
+
+app.get('/media/:name', (req, res) => {
+  var loaction=req.params.name;
+  console.log('check');
+  res.sendFile(__dirname +'/media/'+loaction);
+});
+//요청 인자를 통해 동적으로 medai 폴더에서 이미지를 불러서 보내줌.
+
 //해당 프로젝트 루트폴더 + public~~디렉토리
 server.listen(8080, () => {
   console.log('listening on *:8080');
@@ -40,7 +50,7 @@ io.on('connection', (socket) => {
                 /*
                 var buf = Buffer.from(command, 'utf8');
                 문자받으려고 시도했던거
-                https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+                //https://nodejs.org/api/buffer.html#buffers-and-character-encodings
                 */
                 
                 console.log(buf)
@@ -53,3 +63,30 @@ io.on('connection', (socket) => {
         });
         socket.emit('led', {value: brightness});
 });
+
+let dhtBuffer = '';
+//제이슨 짧게 보내도 한번에 못받아서 끊기고 에러나서 팅겨버리는 현상.
+port.on('data',function(data){
+  // var printdata=data.toString('utf8');
+  // //이렇게 받으니까 바이너리 데이터로 온다. utf8로 문자열 변환했음.
+  // console.log("?: ",printdata)
+  // io.sockets.emit('humidity', {value: printdata}); 
+
+  dhtBuffer += data.toString();
+  //무슨 기준인지 모르겠는데 짤라서 받는거같으니가 버퍼에 뭉쳐놓고
+  if (dhtBuffer.includes('}')) { // 제이슨 }로 끝나니까 그때까지 받다가
+    const jsonData = JSON.parse(dhtBuffer);
+    const humidity = jsonData.h;
+    const temperature = jsonData.t;
+    console.log(humidity, temperature);
+    io.sockets.emit('humidity', {value: humidity}); 
+    io.sockets.emit('temperature', {value: temperature}); 
+
+    dhtBuffer = ''; // 공간 초기화
+}}
+);
+//포트에서 보낸걸 감지할 이벤트리스너.
+
+// port.on('data',function (data){
+//   console.log('data:',port.read())
+// })
