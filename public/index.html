@@ -26,6 +26,7 @@
         <button class="btn btn-primary" onclick="showValue(4)" ><img src="/media/screwdriver.jpg" width="100px" height="100px"/><div>스크류드라이버</div></button>
         <button class="btn btn-primary" onclick="showValue(5)"><img src="/media/stir.jpg" width="100px" height="100px"/><div>섞기</div></button>
         <div id="outputText">hi</div>
+        <div id="pause">ok</div>
         <!-- 이벤트 발생하면 SHOWVALUE 함수실행 -->
 	<br>
      
@@ -43,6 +44,32 @@
                 //         document.getElementById("inputSlider").value = data.value;
                 //         document.getElementById("outputText").innerHTML = data.value;
                 // });
+
+                socket.on('pause', function (data) {
+                        //서버에서 socket.emit 올때 실행됨.
+                        //여기도 이벤트핸들러
+                        console.log("받았다.");
+                        console.log(data);
+                        let p=document.getElementById("pause");
+                        const allButtons = document.querySelectorAll('button');
+                        if(data==1)
+                        {
+                                allButtons.forEach(button => {
+                                button.disabled=true;
+                                });
+                                p.innerText="pause"
+                                console.log('퍼즈');
+                        }
+                        else if(data==3)
+                        {
+                                allButtons.forEach(button => {
+                                button.disabled=false;
+                                });
+                                p.innerText="Oknow"
+                                console.log('풀기');
+                                alert("음료제작완료");
+                        }
+                });
 
                 socket.on('humidity', function (data) {
                         //서버에서 socket.emit 올때 실행됨.

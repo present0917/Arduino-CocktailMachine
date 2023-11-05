@@ -76,7 +76,20 @@ port.on('data',function(datatwo){
 
   dhtBuffer += datatwo.toString();
   //json 전체 안받고 짤라서 받아서 변환하다가 에러가 나는 것 같으니가 버퍼에 뭉쳐놓고
-  if (dhtBuffer.includes('}')) { // 제이슨 }로 끝나니까 그때까지 받다가
+  console.log(dhtBuffer);
+  if(!dhtBuffer.includes('{'))
+  {
+    const temp=dhtBuffer
+    console.log('다른신호다');
+    console.log(temp);
+    io.sockets.emit('pause', temp);   
+    dhtBuffer='';
+    
+  }
+  //해보니까 못해도 {"h" 정도까지는 보내준다. 그게 아닌경우 다른확인메시지를 보낸거라고 판단해서 이런 if else 문을 적었다.
+  else{
+  if (dhtBuffer.includes('}')) {
+    try{
     const jsonData = JSON.parse(dhtBuffer);
     const humidity = jsonData.h;
     const temperature = jsonData.t;
@@ -85,7 +98,15 @@ port.on('data',function(datatwo){
     io.sockets.emit('temperature', {value: temperature}); 
 
     dhtBuffer = ''; // 공간 초기화
-}}
+  } // 제이슨 }로 끝나니까 그때까지 받다가
+  catch(error){
+    console.error('파싱 오류',error);
+    io.sockets.emit('pause', 3);   
+    dhtBuffer='';//예외처리
+  }
+}}}
+
+
 );
 
 
