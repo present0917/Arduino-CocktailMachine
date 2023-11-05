@@ -20,11 +20,12 @@
         <!-- <button onclick='showValue(1)'>1번</button>
         <button onclick='showValue(3)'>3번</button> -->
 
-        <button class="btn btn-primary"><img src="/media/woowoo.jpg" width="100px" height="100px"/><div>woo woo</div></button>
-        <button class="btn btn-primary"><img src="/media/gintonic.jpg" width="100px" height="100px"/><div>진토닉</div></button>
-        <button class="btn btn-primary"><img src="/media/rumcock.jpg" width="100px" height="100px"/><div>럼콕</div></button>
-        <button class="btn btn-primary"><img src="/media/screwdriver.jpg" width="100px" height="100px"/><div>스크류드라이버</div></button>
-        <button class="btn btn-primary"><img src="/media/stir.jpg" width="100px" height="100px"/><div>섞기</div></button>
+        <button class="btn btn-primary" onclick="showValue(1)"><img src="/media/woowoo.jpg" width="100px" height="100px"/><div>woo woo</div></button>
+        <button class="btn btn-primary" onclick="showValue(2)"><img src="/media/gintonic.jpg" width="100px" height="100px"/><div>진토닉</div></button>
+        <button class="btn btn-primary" onclick="showValue(3)"><img src="/media/rumcock.jpg" width="100px" height="100px"/><div>럼콕</div></button>
+        <button class="btn btn-primary" onclick="showValue(4)" ><img src="/media/screwdriver.jpg" width="100px" height="100px"/><div>스크류드라이버</div></button>
+        <button class="btn btn-primary" onclick="showValue(5)"><img src="/media/stir.jpg" width="100px" height="100px"/><div>섞기</div></button>
+        <div id="outputText">hi</div>
         <!-- 이벤트 발생하면 SHOWVALUE 함수실행 -->
 	<br>
      
@@ -60,6 +61,7 @@
                 {
                         document.getElementById("outputText").innerHTML=newValue;
                         socket.emit('led', { value: newValue });
+                        console.log('누름');
                         //실행되면 인자로 받은 값 이용해서 HTML 요소 값 바꿔준 다음
                         //socket io 통신으로 서버에 값을 보내준다.
                         //이벤트명은 led, 객체로서 만들어서 수정된 값을 value 항목에넣는다.

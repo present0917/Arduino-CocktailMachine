@@ -59,7 +59,8 @@ void loop() {
 
   if (Serial.available()) {
     command = Serial.read();
-    Serial.println(command);
+    // Serial.println(command); 
+    //이게 지금 오류를 유발
     if (command == 1) {
       digitalWrite(3, HIGH);
     } else if (command == 2) {
