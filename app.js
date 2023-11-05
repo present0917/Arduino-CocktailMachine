@@ -104,7 +104,9 @@ port.on('data',function(datatwo){
     io.sockets.emit('pause', 3);   
     dhtBuffer='';//예외처리
   }
-}}}
+}}
+
+}
 
 
 );
