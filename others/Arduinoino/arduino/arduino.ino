@@ -55,16 +55,19 @@ void setup() {
 
 void loop() {
   unsigned long time=millis();
+  //첫 작동후 흘러가는 시간이 time이라는 변수에 저장된다.
 
   // while(!Serial.available());
 
   if (Serial.available()) {
+    //서버에서 아두이노로 특정 data를 보내줬을때
     command = Serial.read();
     Serial.println(command);
     tempPreTime=time; 
     //이게 지금 오류를 유발
-    if (command == 1) {
-      digitalWrite(3, HIGH);
+    if (command == 1) { //서버에서 1이라는 binary 데이터를 보내주면
+    //특정 기능을실행하게 한다.
+      digitalWrite(3, HIGH); 
     } else if (command == 2) {
       digitalWrite(4, HIGH);
     } else if (command == 3) {
@@ -85,7 +88,8 @@ void loop() {
   // delay(100);
 
    else if (time - pre >= 1000) {
-     pre=time;
+    pre=time;
+    //1초마다 갱신할수 있도록 장치작동시간과 지난번 센서측정시간을 비교
     humidity();
 
     
