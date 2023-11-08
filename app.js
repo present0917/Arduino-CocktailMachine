@@ -55,15 +55,15 @@ io.on('connection', (socket) => {
                 //https://nodejs.org/api/buffer.html#buffers-and-character-encodings
                 */
                 
-                console.log(buf)
+                // console.log(buf)
                 port.write(buf);
                 //이부분이 실제로 아두이노에 시리얼로 값을 보낸다.
+                socket.emit('ledd', {value: brightness});
+                //이부분 실행시 모든 호스트가 아닌 접속중 호스트에만 적용된다.
 				
-				io.sockets.emit('led', {value: brightness});   
-        //여기서 클라이언트로 변경사항을 보내주는데
-        //여기서 html파일의 socket.on 부분이 이벤트 수신후 실행됨.
+        
         });
-        socket.emit('led', {value: brightness});
+        
 });
 
 let dhtBuffer = '';

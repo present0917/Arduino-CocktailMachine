@@ -10,7 +10,7 @@ DHT dht(DHTPIN, DHTTYPE);
 //ArduinoJson bt Benoit Balanchon Ver6.21.3
 
 unsigned long pre;
-unsigned long tempPreTime;
+unsigned long tempPreTime=999999999;
 
 void humidity() {
   float h = dht.readHumidity();
@@ -64,8 +64,8 @@ void loop() {
     command = Serial.read();
     Serial.println(command);
     tempPreTime=time; 
-    //이게 지금 오류를 유발
-    if (command == 1) { //서버에서 1이라는 binary 데이터를 보내주면
+
+    if (command == 1) { //서버에서 1이라는 데이터를 보내주면
     //특정 기능을실행하게 한다.
       digitalWrite(3, HIGH); 
     } else if (command == 2) {
@@ -77,15 +77,11 @@ void loop() {
     }
   }
    else if (time - tempPreTime >= 5000 && time - tempPreTime <= 6000) {
-    
+    digitalWrite(3, LOW);
     Serial.println(3);
    }
   
-     //Serial.write("Test");
-  //delay(1000);
 
-  // Serial.write("Test");
-  // delay(100);
 
    else if (time - pre >= 1000) {
     pre=time;
@@ -96,5 +92,4 @@ void loop() {
    }
 
 
-  //analogWrite(3, Serial.read());
 }
