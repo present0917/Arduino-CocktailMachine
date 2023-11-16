@@ -33,12 +33,20 @@
 
 	<div id="humidity">test</div>
         <div id="temperature">test</div>
-
+        <div>
+                <button onclick="location.href='/test'">관리자 페이지로</button>
+        </div>
         <script type="text/javascript">
                 var socket = io.connect();
                 //주소 지정할 필요 없는데 기본값이 페이지 제공 호스트를 따라가기 때문이라고 함.
                let check=0;
              
+                function route()
+                {
+
+                }
+
+
 
                 socket.on('pause', function (data) {
                         //서버에서 socket.emit 올때 실행됨.
