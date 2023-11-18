@@ -1,17 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="socket.io/socket.io.js"></script>
 </head>
+
 <body>
     <button onclick="location.href='/'">돌아가기</button>
-    <form>
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Enter admin passWord</label>
-        <input type="password" class="form-control" id="FormControl">
-      </div>
-    </form>
+        <label class="form-label">Enter admin passWord</label>
+        <form id="form">
+            <input type="password" class="form-control" id="password">
+        </form>
+    </div>
+    <div id="hidden" style="display: none;">
+        <button id="stop">stop</button>
+        <button id="start">start</button>
+    </div>
+
 </body>
+<script>
+    var socket = io.connect();
+    let stopButton=document.getElementById("stop");
+    let startButton=document.getElementById("start");
+    stopButton.addEventListener("click",event=>{
+        socket.emit('stopAll');
+    })
+    startButton.addEventListener("click",event=>{
+        console.log("startall")
+        socket.emit('startAll');
+    })
+    let form = document.getElementById("form");
+    console.log(form);
+    form.addEventListener("submit",(event)=>{
+        event.preventDefault();
+        let password=document.getElementById("password");
+        let auth=document.getElementById("hidden");
+        if(password.value=="1234")
+        {
+            console.log("ok");
+            
+            auth.style.display="block";
+        }
+        else{
+            console.log("no");
+            auth.style.display="none";
+        }
+    })
+
+
+</script>
+
 </html>

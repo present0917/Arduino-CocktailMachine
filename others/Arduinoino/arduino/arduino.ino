@@ -76,7 +76,7 @@ void loop() {
       digitalWrite(4, LOW);
     }
   }
-   else if (time - tempPreTime >= 5000 && time - tempPreTime <= 6000) {
+   else if (time - tempPreTime >= 5000 && time - tempPreTime <= 5005) {
     digitalWrite(3, LOW);
     Serial.println(3);
    }
