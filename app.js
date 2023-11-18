@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
   console.log('연결확인메시지')
   socket.on('order', function (dataone) {
     //또다른 이벤트핸들러 -> 'led'라는 이벤트를 수신하면 실행
-                nickname=dataone.nickname;
+                
                 var command = dataone.value;
                 console.log(command)
                 var buf = new Buffer.alloc(1);
@@ -111,8 +111,8 @@ port.on('data',function(datatwo){
       let data=orderq.shift();
       console.log(data);
       
-      io.sockets.emit('next',nickname);
-      console.log(`주문닉네임${nickname}`)
+      io.sockets.emit('next',data.nickname);
+      console.log(`주문닉네임${data.nickname}`)
     }
   }
   else{
