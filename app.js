@@ -17,6 +17,7 @@ const port = new SerialPort({
 //path에 아두이노 연결된 포트, 시리얼통신 9600으로
 
 var brightness = 0;
+let orderq = [];
 
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 //부트스트랩
@@ -80,7 +81,12 @@ io.on('connection', (socket) => {
     console.log("관리자 stop");
     io.sockets.emit('auth', 2);   
   });
-    
+  socket.on('q',(data)=>{
+    console.log(data);
+    orderq.push(data);
+    nickname=data.nickname;
+    io.sockets.emit('wlist',data)
+  });
   
       
         
@@ -102,6 +108,9 @@ port.on('data',function(datatwo){
   {
     if(datatwo==9)
     {
+      let data=orderq.shift();
+      console.log(data);
+      
       io.sockets.emit('next',nickname);
       console.log(`주문닉네임${nickname}`)
     }

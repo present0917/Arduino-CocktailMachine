@@ -62,7 +62,7 @@
                 var socket = io.connect();
                 //주소 지정할 필요 없는데 기본값이 페이지 제공 호스트를 따라가기 때문이라고 함.
                 let check = 0;
-                let orderq = [];
+
                 let waitlist=document.getElementById("waitlist");
                 const setNickname = () => {
                         let button = document.getElementById("nickname");
@@ -148,10 +148,10 @@
                 });
 
                 socket.on('next', function (datas) {
-                        let data=orderq.shift();
+                        
                         waitlist.removeChild(waitlist.firstElementChild);
-                        console.log(data);
-                        if(data.nickname==nickname)
+                        console.log(datas);
+                        if(datas==nickname)
                         {
                                 alert("주문하신 음료 제작이 완료되었습니다");
                         }
@@ -164,27 +164,33 @@
                                 order: newValue,
                                 nickname: nickname
                         }
-                        orderq.push(neworder);
+                        console.log("여기");
+                        socket.emit('q',neworder);
+                        
+                }
+                socket.on('wlist',(data)=>{
+                        console.log(data);
+                       
                         let newlist=document.createElement("li");
-                        newlist.innerText=`주문자:${neworder.nickname} 주문 ${neworder.order}`;
+                        newlist.innerText=`주문자:${data.nickname} 주문 ${data.order}`;
                         waitlist.appendChild(newlist);
-                        if (orderq.length == 1) {
-                                console.log("ordered")
+                        // if (orderq.length == 1) {
+                        //         console.log("ordered")
 
-                                socket.emit('order', 
-                                { 
-                                value: neworder.order,
-                                nickname:neworder.nickname
-                                });
-                        }
-                        else{
-                                console.log("대기");
-                        }
-                        check = 1;
+                        //         socket.emit('order', 
+                        //         { 
+                        //         value: neworder.order,
+                        //         nickname:neworder.nickname
+                        //         });
+                        // }
+                        // else{
+                        //         console.log("대기");
+                        // }
+                        // check = 1;
                         //실행되면 인자로 받은 값 이용해서 HTML 요소 값 바꿔준 다음
                         //socket io 통신으로 서버에 값을 보내준다.
                         //이벤트명은 led, 객체로서 만들어서 수정된 값을 value 항목에넣는다.
-                }
+                })
         </script>
 </body>
 
