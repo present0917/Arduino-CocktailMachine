@@ -8,6 +8,7 @@ const { Buffer } = require('node:buffer');
 const { SerialPort } = require('serialport');
 
 
+let nickname;
 
 const port = new SerialPort({
   path: 'COM5',
@@ -46,8 +47,9 @@ console.log("Web Server Started go to 'http://localhost:8080' in your Browser.")
 io.on('connection', (socket) => {
   //이벤트핸들러 -> 클라이언트와 연결이 확립될시 실행됨
   console.log('연결확인메시지')
-  socket.on('led', function (dataone) {
+  socket.on('order', function (dataone) {
     //또다른 이벤트핸들러 -> 'led'라는 이벤트를 수신하면 실행
+                nickname=dataone.nickname;
                 var command = dataone.value;
                 console.log(command)
                 var buf = new Buffer.alloc(1);
@@ -63,10 +65,8 @@ io.on('connection', (socket) => {
 
 
                 port.write(buf);
-
-
-
                 //이부분이 실제로 아두이노에 시리얼로 값을 보낸다.
+
                 socket.emit('ledd', {value: brightness});
                 //이부분 실행시 모든 호스트가 아닌 접속중 호스트에만 적용된다.
 				
@@ -94,37 +94,51 @@ port.on('data',function(datatwo){
   // console.log("?: ",printdata)
   // io.sockets.emit('humidity', {value: printdata}); 
 
-  dhtBuffer += datatwo.toString();
-  //json 전체 안받고 짤라서 받아서 변환하다가 에러가 나는 것 같으니가 버퍼에 뭉쳐놓고
-  console.log(dhtBuffer);
-  if(!dhtBuffer.includes('{'))
-  {
-    const temp=dhtBuffer
-    console.log('다른신호다');
-    console.log(temp);
-    io.sockets.emit('pause', temp);   
-    dhtBuffer='';
-    
-  }
-  //해보니까 못해도 {"h" 정도까지는 보내준다. 그게 아닌경우 다른확인메시지를 보낸거라고 판단해서 이런 if else 문을 적었다.
-  else{
-  if (dhtBuffer.includes('}')) {
-    try{
-    const jsonData = JSON.parse(dhtBuffer);
-    const humidity = jsonData.h;
-    const temperature = jsonData.t;
-    console.log(humidity, temperature);
-    io.sockets.emit('humidity', {value: humidity}); 
-    io.sockets.emit('temperature', {value: temperature}); 
 
-    dhtBuffer = ''; // 공간 초기화
-  } // 제이슨 }로 끝나니까 그때까지 받다가
-  catch(error){
-    console.error('파싱 오류',error);
-    io.sockets.emit('pause', 3);   
-    dhtBuffer='';//예외처리
+  //json 전체 안받고 짤라서 받아서 변환하다가 에러가 나는 것 같으니가 버퍼에 뭉쳐놓고
+
+  console.log(`이건 : ${datatwo}`)
+  if(datatwo>=1 && datatwo<=10)
+  {
+    if(datatwo==9)
+    {
+      io.sockets.emit('next',nickname);
+      console.log(`주문닉네임${nickname}`)
+    }
   }
-}}
+  else{
+    dhtBuffer += datatwo.toString();
+    console.log(dhtBuffer);
+    if(!dhtBuffer.includes('{'))
+    {
+      const temp=dhtBuffer
+      console.log('다른신호다');
+      console.log(temp);
+      io.sockets.emit('pause', temp);   
+      dhtBuffer='';
+      
+    }
+    //해보니까 못해도 {"h" 정도까지는 보내준다. 그게 아닌경우 다른확인메시지를 보낸거라고 판단해서 이런 if else 문을 적었다.
+    else{
+    if (dhtBuffer.includes('}')) {
+      try{
+      const jsonData = JSON.parse(dhtBuffer);
+      const humidity = jsonData.h;
+      const temperature = jsonData.t;
+      console.log(humidity, temperature);
+      io.sockets.emit('humidity', {value: humidity}); 
+      io.sockets.emit('temperature', {value: temperature}); 
+  
+      dhtBuffer = ''; // 공간 초기화
+    } // 제이슨 }로 끝나니까 그때까지 받다가
+    catch(error){
+      console.error('파싱 오류',error);
+      io.sockets.emit('pause', 3);   
+      dhtBuffer='';//예외처리
+    }
+  }
+  }
+}
 
 }
 

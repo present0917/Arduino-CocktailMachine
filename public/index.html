@@ -19,24 +19,21 @@
         <!-- <button onclick='showValue(1)'>1번</button>
         <button onclick='showValue(3)'>3번</button> -->
 
-        <button class="btn btn-primary" onclick="showValue(1)"><img src="/media/woowoo.jpg" width="100px"
-                        height="100px" />
+        <button class="btn btn-primary" onclick="order(1)"><img src="/media/woowoo.jpg" width="100px" height="100px" />
                 <div>woo woo</div>
         </button>
-        <button class="btn btn-primary" onclick="showValue(2)"><img src="/media/gintonic.jpg" width="100px"
+        <button class="btn btn-primary" onclick="order(2)"><img src="/media/gintonic.jpg" width="100px"
                         height="100px" />
                 <div>진토닉</div>
         </button>
-        <button class="btn btn-primary" onclick="showValue(3)"><img src="/media/rumcock.jpg" width="100px"
-                        height="100px" />
+        <button class="btn btn-primary" onclick="order(3)"><img src="/media/rumcock.jpg" width="100px" height="100px" />
                 <div>럼콕</div>
         </button>
-        <button class="btn btn-primary" onclick="showValue(4)"><img src="/media/screwdriver.jpg" width="100px"
+        <button class="btn btn-primary" onclick="order(4)"><img src="/media/screwdriver.jpg" width="100px"
                         height="100px" />
                 <div>스크류드라이버</div>
         </button>
-        <button class="btn btn-primary" onclick="showValue(5)"><img src="/media/stir.jpg" width="100px"
-                        height="100px" />
+        <button class="btn btn-primary" onclick="order(5)"><img src="/media/stir.jpg" width="100px" height="100px" />
                 <div>섞기</div>
         </button>
         <div id="outputText">hi</div>
@@ -55,32 +52,34 @@
                 <button onclick="location.href='/test'">관리자 페이지로</button>
         </div>
 
-        <div>대기열</div>
-        <ul id="waitlist"></ul>
+        <div>
+                대기열
+                <ul id="waitlist"></ul>
+        </div>
+
         <script type="text/javascript">
-                let nickname="";
+                let nickname = "";
                 var socket = io.connect();
                 //주소 지정할 필요 없는데 기본값이 페이지 제공 호스트를 따라가기 때문이라고 함.
                 let check = 0;
-                let waitCount=0;
-                const setNickname = ()=>{
-                        let button=document.getElementById("nickname");
-                        let input=document.getElementById("nicknameInput");
-                        let printnickname=document.getElementById("printNickname");
-                        if(input.disabled==false)
-                        {
-                                input.disabled=true;
-                                nickname=input.value;
-                                printnickname.innerText=nickname;
-                                button.innerText="닉네임 변경"
+                let orderq = [];
+                let waitlist=document.getElementById("waitlist");
+                const setNickname = () => {
+                        let button = document.getElementById("nickname");
+                        let input = document.getElementById("nicknameInput");
+                        let printnickname = document.getElementById("printNickname");
+                        if (input.disabled == false) {
+                                input.disabled = true;
+                                nickname = input.value;
+                                printnickname.innerText = nickname;
+                                button.innerText = "닉네임 변경"
                         }
-                        else
-                        {
-                                input.disabled=false;
+                        else {
+                                input.disabled = false;
                         }
                 }
 
-                socket.on('auth',function (data){
+                socket.on('auth', function (data) {
                         console.log('관리자명령')
                         let p = document.getElementById("pause");
                         const allButtons = document.querySelectorAll('button');
@@ -91,7 +90,7 @@
                                 p.innerText = "점검중입니다."
                                 console.log('퍼즈');
                         }
-                        else{
+                        else {
                                 allButtons.forEach(button => {
                                         button.disabled = false;
                                 });
@@ -118,20 +117,20 @@
                                 p.innerText = "pause"
                                 console.log('퍼즈');
                         }
-                        else{
+                        else {
                                 allButtons.forEach(button => {
                                         button.disabled = false;
                                 });
                                 p.innerText = "Oknow"
                                 console.log('풀기');
                                 let q = document.getElementById("led")
-                                if (check === 1) {
+                                // if (check === 1) {
 
-                                        alert('주문완료')
-                                }
-                                else {
-                                        q.innerText = "다른데"
-                                }
+                                //         alert('주문완료')
+                                // }
+                                // else {
+                                //         q.innerText = "다른데"
+                                // }
                         }
                 });
 
@@ -148,10 +147,39 @@
                         document.getElementById("temperature").innerHTML = `현재온도는 ${data.value}`;
                 });
 
-                function showValue(newValue) {
+                socket.on('next', function (datas) {
+                        let data=orderq.shift();
+                        waitlist.removeChild(waitlist.firstElementChild);
+                        console.log(data);
+                        if(data.nickname==nickname)
+                        {
+                                alert("주문하신 음료 제작이 완료되었습니다");
+                        }
+
+                });
+
+                function order(newValue) {
                         document.getElementById("outputText").innerHTML = newValue;
-                        socket.emit('led', { value: newValue });
-                        console.log('누름');
+                        let neworder = {
+                                order: newValue,
+                                nickname: nickname
+                        }
+                        orderq.push(neworder);
+                        let newlist=document.createElement("li");
+                        newlist.innerText=`주문자:${neworder.nickname} 주문 ${neworder.order}`;
+                        waitlist.appendChild(newlist);
+                        if (orderq.length == 1) {
+                                console.log("ordered")
+
+                                socket.emit('order', 
+                                { 
+                                value: neworder.order,
+                                nickname:neworder.nickname
+                                });
+                        }
+                        else{
+                                console.log("대기");
+                        }
                         check = 1;
                         //실행되면 인자로 받은 값 이용해서 HTML 요소 값 바꿔준 다음
                         //socket io 통신으로 서버에 값을 보내준다.
@@ -161,3 +189,8 @@
 </body>
 
 </html>
+<!--
+버튼누르면  order 함수 실행. 주문 음료 번호와 주문자 닉네임이 담긴 객체 생성
+큐에 추가하는데 큐에 배열 하나(큐가 비어있는 상태에서 시키면) 바로 주문넣는다
+
+-->
