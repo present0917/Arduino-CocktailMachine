@@ -19,7 +19,10 @@ const port = new SerialPort({
 var brightness = 0;
 let orderq = [];
 
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use(express.static('public'));
+//css파일로 적용위한 기본루트
+
+//app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 //부트스트랩
 
 app.get('/', (req, res) => {
@@ -45,31 +48,32 @@ console.log("Web Server Started go to 'http://localhost:8080' in your Browser.")
 //html 파일로 8080포트로 node 서버 열고
 
 
+
 io.on('connection', (socket) => {
   //이벤트핸들러 -> 클라이언트와 연결이 확립될시 실행됨
   console.log('연결확인메시지')
   socket.on('order', function (dataone) {
     //또다른 이벤트핸들러 -> 'led'라는 이벤트를 수신하면 실행
+                console.log('order function');
+                // var command = dataone.value;
+                // console.log(command)
+                // var buf = new Buffer.alloc(1);
+                // buf.writeUInt8(command, 0);
+
+                // /*
+                // var buf = Buffer.from(command, 'utf8');
+                // 문자받으려고 시도했던거
+                // //https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+                // */
                 
-                var command = dataone.value;
-                console.log(command)
-                var buf = new Buffer.alloc(1);
-                buf.writeUInt8(command, 0);
-
-                /*
-                var buf = Buffer.from(command, 'utf8');
-                문자받으려고 시도했던거
-                //https://nodejs.org/api/buffer.html#buffers-and-character-encodings
-                */
-                
-                console.log(buf)
+                // console.log(buf)
 
 
-                port.write(buf);
-                //이부분이 실제로 아두이노에 시리얼로 값을 보낸다.
+                // port.write(buf);
+                // //이부분이 실제로 아두이노에 시리얼로 값을 보낸다.
 
-                socket.emit('ledd', {value: brightness});
-                //이부분 실행시 모든 호스트가 아닌 접속중 호스트에만 적용된다.
+                // socket.emit('ledd', {value: brightness});
+                // //이부분 실행시 모든 호스트가 아닌 접속중 호스트에만 적용된다.
 				
         
         });
@@ -82,12 +86,26 @@ io.on('connection', (socket) => {
     io.sockets.emit('auth', 2);   
   });
   socket.on('q',(data)=>{
+    //주문받으면
     console.log(data);
     orderq.push(data);
+    console.log(orderq);
+    console.log(orderq.length);
+    if(orderq.length==1)
+    //처음받아서 길이가 1이 됐을때만
+  //그대로 아두이노로 주문 넣는다
+    {
+      let temp=orderq[0].order;
+      console.log(temp.toString());
+      port.write(temp.toString());
+    }
+
     nickname=data.nickname;
     io.sockets.emit('wlist',data)
+    //주문정보 html로 보낸다.
+    
   });
-  
+
       
         
 });
@@ -104,15 +122,24 @@ port.on('data',function(datatwo){
   //json 전체 안받고 짤라서 받아서 변환하다가 에러가 나는 것 같으니가 버퍼에 뭉쳐놓고
 
   console.log(`이건 : ${datatwo}`)
-  if(datatwo>=1 && datatwo<=10)
+  if(datatwo>=1 && datatwo<=9)
   {
-    if(datatwo==9)
+    if(datatwo==8)//제작완료시
     {
+      console.log('8이네');
       let data=orderq.shift();
       console.log(data);
-      
       io.sockets.emit('next',data.nickname);
       console.log(`주문닉네임${data.nickname}`)
+      //아두이노에서 제작완료돼서 8 보내주면
+      //큐에서 하나 지우고 닉네임대조위해 html next 함수실행.
+    }
+    else if(datatwo==9)//다음거시작버튼 누르면
+    {
+      console.log('9이네');
+      let temp=orderq[0].order;
+      console.log(temp.toString());
+      port.write(temp.toString());
     }
   }
   else{

@@ -12,6 +12,27 @@ DHT dht(DHTPIN, DHTTYPE);
 unsigned long pre;
 unsigned long tempPreTime=999999999;
 int making=0;
+
+void makeone(){
+  making=1;
+  digitalWrite(3,HIGH);
+  delay(3000);
+  digitalWrite(3,LOW);
+  making=0;
+  Serial.println(8);
+  delay(1000);
+}
+
+void maketwo(){
+  making=1;
+  digitalWrite(4,HIGH);
+  delay(3000);
+  digitalWrite(4,LOW);
+  making=0;
+  Serial.println(8);
+  delay(1000);
+}
+
 void humidity() {
   float h = dht.readHumidity();
   // Read temperature as Celsius (the default)
@@ -57,13 +78,8 @@ void setup() {
 void loop() {
   int button=digitalRead(7);
   if(button==LOW && making==0){
-      Serial.println(9);
-      digitalWrite(3,HIGH);
+      Serial.print(9); //다음거 버튼누른다.
       delay(1000); //없으면 너무 중복돼서 데이터가 가
-  }
-  else
-  {
-    digitalWrite(3,LOW);
   }
   unsigned long time=millis();
   //첫 작동후 흘러가는 시간이 time이라는 변수에 저장된다.
@@ -73,26 +89,34 @@ void loop() {
   if (Serial.available()) {
     //서버에서 아두이노로 특정 data를 보내줬을때
     command = Serial.read();
-    Serial.println(command);
-    making=1;
+
+    
     tempPreTime=time; 
+  if(command=='1')
+  {
+    makeone();
+  }
+  else if(command=='2')
+  {
+    maketwo();
+  }
   }
 
-   else if (time - tempPreTime >= 5000 && time - tempPreTime <= 5001) {
-    digitalWrite(3, LOW);
-    Serial.println(3);
-    making=0;
-   }
+  //  else if (time - tempPreTime >= 5000 && time - tempPreTime <= 5001) {
+  //   digitalWrite(3, LOW);
+  //   Serial.println(3);
+  //   making=0;
+  //  }
   
 
 
-   else if (time - pre >= 5000) {
+   else if (time - pre >= 10000) {
     pre=time;
     //1초마다 갱신할수 있도록 장치작동시간과 지난번 센서측정시간을 비교
     humidity();
 
     
-   }
+ }
 
 
 }
