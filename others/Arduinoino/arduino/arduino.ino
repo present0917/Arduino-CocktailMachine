@@ -3,8 +3,6 @@
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 //온습도센서 (DHT sensor library by Adafruiit ver1.4.4)
-
-
 #include <ArduinoJson.h>
 //json 처리 위한 라이브러리
 //ArduinoJson bt Benoit Balanchon Ver6.21.3
@@ -12,6 +10,10 @@ DHT dht(DHTPIN, DHTTYPE);
 unsigned long pre;
 unsigned long tempPreTime=999999999;
 int making=0;
+
+void stir(){
+  
+}
 
 void makeone(){
   making=1;
