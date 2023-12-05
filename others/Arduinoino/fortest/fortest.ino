@@ -29,10 +29,10 @@ void setup() {
   pinMode(A2,INPUT_PULLUP);
   pinMode(A1,INPUT_PULLUP);
 
-  pinMode(A4,OUTPUT);
-  pinMode(A3,OUTPUT);
-  pinMode(A2,OUTPUT);
-  pinMode(A1,OUTPUT);
+  // pinMode(A4,OUTPUT);
+  // pinMode(A3,OUTPUT);
+  // pinMode(A2,OUTPUT);
+  // pinMode(A1,OUTPUT);
 }
  
 void loop() {
