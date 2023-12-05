@@ -30,10 +30,9 @@ int IN8 = 9;
 
 void makeone() {
   making = 1;
-  digitalWrite(3, HIGH);
+  StartA();
   delay(3000);
-  digitalWrite(3, LOW);
-  making = 0;
+  StopA();
   Serial.println(8);
   delay(1000);
 }
@@ -83,6 +82,26 @@ void humidity() {
 }
 
 
+void liquid() {
+  // int humi=h;
+  // int celci=t;
+  //dht11 공식문서 참고내용
+
+  DynamicJsonDocument doc(1024);
+  
+  
+  //수위센서 추가할부분
+  doc["l"]= digitalRead(12);
+  
+
+
+  String jsonStr;
+  serializeJson(doc, jsonStr);
+  Serial.print(jsonStr);
+  //arduinoJson 예제 중 StringExample 파일 참고.
+}
+
+
 int command;
 void setup() {
   Serial.begin(9600);
@@ -99,12 +118,13 @@ void setup() {
   pinMode(IN6, OUTPUT);
   pinMode(IN7, OUTPUT);
   pinMode(IN8, OUTPUT);
-  pinMode(A4, OUTPUT);
-  pinMode(A3, OUTPUT);
-  pinMode(A2, OUTPUT);
-  pinMode(A1, OUTPUT);
+  // pinMode(A4, OUTPUT);
+  // pinMode(A3, OUTPUT);
+  // pinMode(A2, OUTPUT);
+  // pinMode(A1, OUTPUT);
   //모터드라이버
-  pinMode(A0, INPUT_PULLUP);
+  pinMode(A1, INPUT_PULLUP);
+  pinMode(A2, INPUT_PULLUP);
   //버튼
 }
 
@@ -112,13 +132,18 @@ void loop() {
   unsigned long time = millis();
   //첫 작동후 흘러가는 시간이 time이라는 변수에 저장된다.
 
-  int button = digitalRead(A0);
+  int button = digitalRead(A1);
   if (button == LOW && making == 0) {
     Serial.print(9);  //다음거 버튼누른다.
     delay(1000);      //없으면 너무 중복돼서 데이터가 가
   }
   //다음거시작
 
+  int button2 = digitalRead(A2);
+  if (button == LOW && making == 0) {
+    Serial.print(8);  //다음거 버튼누른다.
+    delay(1000);      //없으면 너무 중복돼서 데이터가 가
+  }
 
 
 
@@ -129,11 +154,15 @@ void loop() {
     if (command == '1') {
       makeone();
     } else if (command == '2') {
-      maketwo();
+      stir();
+      delay(5000);
+      stirstop();
+      delay(1000);
     }
-  } else if (time - pre >= 10000) {
+  } 
+  else if (time - pre >= 5000) {
     pre = time;//10초마다 갱신할수 있도록 장치작동시간과 지난번 센서측정시간을 비교
-    humidity();
+    liquid();
   }
 
 
@@ -194,7 +223,7 @@ void StopD()
 }
 void StartE()
 {
-    digitalWrite(A1),HIGH);
+    digitalWrite(A1,HIGH);
     digitalWrite(A2,LOW);
 }
 void StopE()

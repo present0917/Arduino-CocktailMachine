@@ -11,7 +11,7 @@ const { SerialPort } = require('serialport');
 let nickname;
 
 const port = new SerialPort({
-  path: 'COM5',
+  path: 'COM3',
   baudRate: 9600,
 });
 //path에 아두이노 연결된 포트, 시리얼통신 9600으로

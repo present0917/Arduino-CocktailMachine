@@ -23,6 +23,7 @@ void setup() {
   pinMode(IN6,OUTPUT);
   pinMode(IN7,OUTPUT);
   pinMode(IN8,OUTPUT);
+  pinMode(12, INPUT);  //수위센서
 
   pinMode(A4,INPUT_PULLUP);
   pinMode(A3,INPUT_PULLUP);
@@ -42,26 +43,28 @@ void loop() {
   int button4=digitalRead(A1);
   if(!button1)
   {
-    StartA();
-    Serial.println("A");
+    // StartA();
+    // one();
+    Serial.println("ok");
   }
   else
   {
-    StopA();
+    // stop();
+    // StopA();
   }
   if(!button2)
   {
-    StartB();
-    Serial.println("B");
+    // StartB();
+    // Serial.println("B");
   }
   else
   {
-    StopB();
+    // StopB();
   }
   if(!button3)
   {
-    StartC();
-    Serial.println("C");
+     StartC();
+     Serial.println("C");
   }
   else
   {
@@ -69,20 +72,48 @@ void loop() {
   }
   if(!button4)
   {
-    stir();
-    Serial.println("stir");
+    // stir();
+    // Serial.println("stir");
+    
   }
   else
   {
-    stirstop();
+    // stirstop();
+    
   }
 }
 void stir(){
-  myservo.write(60);
+  myservo.write(30);
 }
 void stirstop(){
   myservo.write(90);
 }
+
+void stop()
+{
+    digitalWrite(IN7,HIGH);
+    digitalWrite(IN8,LOW);
+    analogWrite(11,0);
+}
+void one()
+{
+    digitalWrite(IN7,HIGH);
+    digitalWrite(IN8,LOW);
+    analogWrite(11,80);
+}
+void two()
+{
+    digitalWrite(IN1,HIGH);
+    digitalWrite(IN2,LOW);
+    analogWrite(11,50);
+}
+void three()
+{
+    digitalWrite(IN1,HIGH);
+    digitalWrite(IN2,LOW);
+    analogWrite(11,100);
+}
+
 void StartA()
 {
     digitalWrite(IN1,HIGH);
@@ -125,7 +156,7 @@ void StopD()
 }
 void StartE()
 {
-    digitalWrite(A1),HIGH);
+    digitalWrite(A1,HIGH);
     digitalWrite(A2,LOW);
 }
 void StopE()
