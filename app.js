@@ -77,6 +77,7 @@ io.on('connection', (socket) => {
 				
         
         });
+
   socket.on('stopAll', ()=>{
     console.log("관리자 stop");
     io.sockets.emit('auth', 1);   
@@ -85,6 +86,7 @@ io.on('connection', (socket) => {
     console.log("관리자 stop");
     io.sockets.emit('auth', 2);   
   });
+
   socket.on('q',(data)=>{
     //주문받으면
     console.log(data);
@@ -161,15 +163,18 @@ port.on('data',function(datatwo){
       const jsonData = JSON.parse(dhtBuffer);
       const humidity = jsonData.h;
       const temperature = jsonData.t;
-      console.log(humidity, temperature);
+      const liquidCheck=jsonData.l;
+      console.log(humidity, temperature,liquidCheck);
+
       io.sockets.emit('humidity', {value: humidity}); 
       io.sockets.emit('temperature', {value: temperature}); 
-  
+      io.sockets.emit('liquidcheck',{value:liquidCheck});
+
       dhtBuffer = ''; // 공간 초기화
     } // 제이슨 }로 끝나니까 그때까지 받다가
     catch(error){
       console.error('파싱 오류',error);
-      io.sockets.emit('pause', 3);   
+      //io.sockets.emit('pause', 3);   
       dhtBuffer='';//예외처리
     }
   }

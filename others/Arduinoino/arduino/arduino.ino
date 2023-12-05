@@ -26,8 +26,7 @@ int IN6 = 7;
 int IN7 = 8;
 int IN8 = 9;
 
-void stir() {
-}
+
 
 void makeone() {
   making = 1;
@@ -145,3 +144,72 @@ void loop() {
   //   making=0;
   //  }
 }
+
+void stir(){
+  myservo.write(60);
+}
+void stirstop(){
+  myservo.write(90);
+}
+
+void StartA()
+{
+    digitalWrite(IN1,HIGH);
+    digitalWrite(IN2,LOW);
+}
+void StopA()
+{
+    digitalWrite(IN1,LOW);
+    digitalWrite(IN2,LOW);
+}
+void StartB()
+{
+    digitalWrite(IN3,HIGH);
+    digitalWrite(IN4,LOW);
+}
+void StopB()
+{
+    digitalWrite(IN3,LOW);
+    digitalWrite(IN4,LOW);
+}
+void StartC()
+{
+    digitalWrite(IN5,HIGH);
+    digitalWrite(IN6,LOW);
+}
+void StopC()
+{
+    digitalWrite(IN5,LOW);
+    digitalWrite(IN6,LOW);
+}
+void StartD()
+{
+    digitalWrite(IN7,HIGH);
+    digitalWrite(IN8,LOW);
+}
+void StopD()
+{
+    digitalWrite(IN7,LOW);
+    digitalWrite(IN8,LOW);
+}
+void StartE()
+{
+    digitalWrite(A1),HIGH);
+    digitalWrite(A2,LOW);
+}
+void StopE()
+{
+    digitalWrite(A1,LOW);
+    digitalWrite(A2,LOW);
+}
+void StartF()
+{
+    digitalWrite(A3,HIGH);
+    digitalWrite(A4,LOW);
+}
+void StopF()
+{
+    digitalWrite(A3,LOW);
+    digitalWrite(A4,LOW);
+}
+
