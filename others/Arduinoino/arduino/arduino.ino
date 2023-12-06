@@ -1,5 +1,5 @@
 #include "DHT.h"
-#define DHTPIN 11
+#define DHTPIN 13
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 //온습도센서 (DHT sensor library by Adafruiit ver1.4.4)
@@ -26,26 +26,56 @@ int IN6 = 7;
 int IN7 = 8;
 int IN8 = 9;
 
+void milk()
+{
+  making=1;
+  StartC();
+  delay(2000);
+  StopC();
+  StartD(80);
+  delay(8000);
+  StopD();
+  making=0;
+  delay(500);
+}
 
-
-void makeone() {
+void screw(int num) {
   making = 1;
   StartA();
-  delay(3000);
+  delay(2000);
   StopA();
+  StartB();
+  delay(6000);
+  StopB();
+  if(num==1)
+  {
+    StartE();
+    delay(500);
+    StopE();
+  }
+  else{
+
+  }
+  
   Serial.println(8);
-  delay(1000);
+  making=0;
+  delay(500);
 }
 
-void maketwo() {
+void cock() {
   making = 1;
-  digitalWrite(4, HIGH);
-  delay(3000);
-  digitalWrite(4, LOW);
-  making = 0;
+  StartA();
+  delay(2000);
+  StopA();
+  StartF();
+  delay(6000);
+  StopF();
+  
   Serial.println(8);
-  delay(1000);
+  making=0;
+  delay(500);
 }
+
 
 void humidity() {
   float h = dht.readHumidity();
@@ -69,10 +99,10 @@ void humidity() {
   doc["h"] = h;
   doc["t"] = t;
 
-  /*
+  
   //수위센서 추가할부분
   doc["l"]= digitalRead(12);
-  */
+  
 
 
   String jsonStr;
@@ -118,13 +148,13 @@ void setup() {
   pinMode(IN6, OUTPUT);
   pinMode(IN7, OUTPUT);
   pinMode(IN8, OUTPUT);
-  // pinMode(A4, OUTPUT);
-  // pinMode(A3, OUTPUT);
-  // pinMode(A2, OUTPUT);
-  // pinMode(A1, OUTPUT);
+  pinMode(A5, OUTPUT);
+  pinMode(A4, OUTPUT);
+  pinMode(A3, OUTPUT);
+  pinMode(A2, OUTPUT);
   //모터드라이버
   pinMode(A1, INPUT_PULLUP);
-  pinMode(A2, INPUT_PULLUP);
+  pinMode(A0, INPUT_PULLUP);
   //버튼
 }
 
@@ -139,10 +169,10 @@ void loop() {
   }
   //다음거시작
 
-  int button2 = digitalRead(A2);
+  int button2 = digitalRead(A0);
   if (button == LOW && making == 0) {
-    Serial.print(8);  //다음거 버튼누른다.
-    delay(1000);      //없으면 너무 중복돼서 데이터가 가
+    Serial.print(8);  //완료신호 테스트용으로 둔거
+    delay(1000);      
   }
 
 
@@ -152,17 +182,27 @@ void loop() {
     command = Serial.read();  //읽은거 command 저장
     //tempPreTime = time;
     if (command == '1') {
-      makeone();
-    } else if (command == '2') {
+      screw(0);
       stir();
-      delay(5000);
       stirstop();
-      delay(1000);
     }
+    else if (command == '2') {
+      screw(1);
+      delay(500);
+    }
+    else if (command == '3') {
+      cock();
+      delay(500);
+    }
+    else if (command == '4') {
+      milk();
+      delay(500);
+    }
+
   } 
   else if (time - pre >= 5000) {
     pre = time;//10초마다 갱신할수 있도록 장치작동시간과 지난번 센서측정시간을 비교
-    liquid();
+    humidity();
   }
 
 
@@ -176,9 +216,11 @@ void loop() {
 
 void stir(){
   myservo.write(60);
+  delay(2000);
 }
 void stirstop(){
   myservo.write(90);
+  delay(500);
 }
 
 void StartA()
@@ -211,10 +253,11 @@ void StopC()
     digitalWrite(IN5,LOW);
     digitalWrite(IN6,LOW);
 }
-void StartD()
+void StartD(int num)
 {
     digitalWrite(IN7,HIGH);
     digitalWrite(IN8,LOW);
+    analogWrite(11,num);
 }
 void StopD()
 {
@@ -223,22 +266,22 @@ void StopD()
 }
 void StartE()
 {
-    digitalWrite(A1,HIGH);
-    digitalWrite(A2,LOW);
+    digitalWrite(A5,HIGH);
+    digitalWrite(A4,LOW);
 }
 void StopE()
 {
-    digitalWrite(A1,LOW);
-    digitalWrite(A2,LOW);
+    digitalWrite(A5,LOW);
+    digitalWrite(A4,LOW);
 }
 void StartF()
 {
     digitalWrite(A3,HIGH);
-    digitalWrite(A4,LOW);
+    digitalWrite(A2,LOW);
 }
 void StopF()
 {
     digitalWrite(A3,LOW);
-    digitalWrite(A4,LOW);
+    digitalWrite(A2,LOW);
 }
 

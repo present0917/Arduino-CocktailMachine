@@ -165,7 +165,7 @@ port.on('data',function(datatwo){
       const temperature = jsonData.t;
       const liquidCheck=jsonData.l;
       console.log(humidity, temperature,liquidCheck);
-
+      console.log(orderq);
       io.sockets.emit('humidity', {value: humidity}); 
       io.sockets.emit('temperature', {value: temperature}); 
       io.sockets.emit('liquidcheck',{value:liquidCheck});
