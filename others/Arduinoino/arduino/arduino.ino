@@ -1,3 +1,11 @@
+/*
+콜라 A
+보드카 B
+우유 C
+깔루아 D(PMW)
+주스 E
+그레나딘 F
+*/
 #include "DHT.h"
 #define DHTPIN 13
 #define DHTTYPE DHT11
@@ -26,8 +34,41 @@ int IN6 = 7;
 int IN7 = 8;
 int IN8 = 9;
 
+void temp()
+{
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  if (isnan(h) || isnan(t)) {
+    screw(0);
+    return;
+  }
+  if(t>25)
+  {
+    milk();
+    delay(500);
+  }
+  else if(h>60)
+  {
+    cock();
+    delay(500);
+  }
+  else if(h>40)
+  {
+      screw(0);
+      stir();
+      stirstop();
+  }
+  else
+  {
+    screw(1);
+     delay(500);
+  }
+  
+}
+
 void milk()
 {
+  Serial.print("cola");
   making=1;
   StartC();
   delay(2000);
@@ -35,23 +76,24 @@ void milk()
   StartD(80);
   delay(8000);
   StopD();
+  Serial.println(8);
   making=0;
   delay(500);
 }
 
 void screw(int num) {
   making = 1;
-  StartA();
-  delay(2000);
-  StopA();
   StartB();
-  delay(6000);
+  delay(1500);
   StopB();
+  StartE();
+  delay(4000);
+  StopE();
   if(num==1)
   {
-    StartE();
+    StartF();
     delay(500);
-    StopE();
+    StopF();
   }
   else{
 
@@ -64,12 +106,12 @@ void screw(int num) {
 
 void cock() {
   making = 1;
+  StartB();
+  delay(1500);
+  StopB();
   StartA();
-  delay(2000);
+  delay(5000);
   StopA();
-  StartF();
-  delay(6000);
-  StopF();
   
   Serial.println(8);
   making=0;
@@ -79,18 +121,15 @@ void cock() {
 
 void humidity() {
   float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
+// Read temperature as Celsius (the default)
+
   // Read temperature as Fahrenheit (isFahrenheit = true)
-  float f = dht.readTemperature(true);
-  if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.write(("Failed to read from DHT sensor!"));
-    return;
-  }
-  // Compute heat index in Fahrenheit (the default)
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius (isFahreheit = false)
-  float hic = dht.computeHeatIndex(t, h, false);
+  // 화씨 하려면 true 붙이라함
+  // if (isnan(h) || isnan(t) ) {
+  //   Serial.write(("Failed to read from DHT sensor!"));
+  //   return;
+  // }
   // int humi=h;
   // int celci=t;
   //dht11 공식문서 참고내용
@@ -182,21 +221,34 @@ void loop() {
     command = Serial.read();  //읽은거 command 저장
     //tempPreTime = time;
     if (command == '1') {
-      screw(0);
-      stir();
-      stirstop();
+      Serial.print("screw");
+       screw(0);
+       stir();
+       stirstop();
     }
     else if (command == '2') {
+      Serial.print("sun");
       screw(1);
       delay(500);
     }
     else if (command == '3') {
+      Serial.print("cola");
       cock();
       delay(500);
     }
     else if (command == '4') {
       milk();
       delay(500);
+    }
+    else if (command == '5') {
+      temp();
+      delay(500);
+    }
+    else if (command == '6') {
+      stir();
+      delay(500);
+        stirstop();
+        Serial.print(8); 
     }
 
   } 

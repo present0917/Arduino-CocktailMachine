@@ -6,9 +6,11 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const { Buffer } = require('node:buffer');
 const { SerialPort } = require('serialport');
-
+const multer = require('multer')
 
 let nickname;
+
+
 
 const port = new SerialPort({
   path: 'COM3',
@@ -168,8 +170,14 @@ port.on('data',function(datatwo){
       console.log(orderq);
       io.sockets.emit('humidity', {value: humidity}); 
       io.sockets.emit('temperature', {value: temperature}); 
-      io.sockets.emit('liquidcheck',{value:liquidCheck});
-
+      //console.log(liquidCheck);//감지가 되면 0이더라
+       io.sockets.emit('liquid', {value: liquidCheck}); 
+      if((liquidCheck=='1'))
+      {
+        io.sockets.emit('emergency');
+        console.log("음료부족")
+       
+      }
       dhtBuffer = ''; // 공간 초기화
     } // 제이슨 }로 끝나니까 그때까지 받다가
     catch(error){

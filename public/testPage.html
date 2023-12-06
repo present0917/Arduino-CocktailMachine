@@ -24,6 +24,11 @@
     </div>
 
     <section class="menu_container">
+        <audio controls id="audio" muted>
+            <source src='https://blog.kakaocdn.net/dn/cldlLs/btsBxWm0qHZ/rxC31KoyhkakYVpIgArnbK/beep-01a.mp3?attach=1&knm=tfile.mp3'
+            type="audio/mpeg">
+    </audio>
+
         <div class="menu"></div>
         <div class="menu"></div>
         <div class="menu"></div>
@@ -37,9 +42,30 @@
 
 </body>
 <script>
+    const med=document.getElementById("audio");
+                        
     var socket = io.connect();
     let stopButton=document.getElementById("stop");
     let startButton=document.getElementById("start");
+    socket.on('liquid', function (data) {
+                        //서버에서 socket.emit 올때 실행됨.
+                        //여기도 이벤트핸들러
+                        
+                        if(data.value)
+                        {
+                            console.log("음료부족");
+                        med.muted = false;
+                        med.play();
+                                        
+                        }
+                        else{       
+                       
+
+                        med.pause();   
+                        
+                }
+                        
+                });
     stopButton.addEventListener("click",event=>{
         socket.emit('stopAll');
     })
@@ -64,6 +90,12 @@
             auth.style.display="none";
         }
     })
+    socket.on('emergency', function (data) {
+                        //서버에서 socket.emit 올때 실행됨.
+                        //여기도 이벤트핸들러
+
+                        
+                });
 
     
 
