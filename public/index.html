@@ -43,7 +43,7 @@
                         <div>보드카콕</div>
                 </button>
                 <button class="menu" onclick="order(4)">
-                        <img src="/media/mil.png" width="100%" height="100%" />
+                        <img src="/media/mil.png" width="75%" height="100%" />
                         <div>깔루아밀크</div>
                 </button>
                 <button class="menu" onclick="order(5)">
@@ -195,11 +195,11 @@
 
                         if(data.value)
                         {
-                                document.getElementById("liquid").innerHTML = `ok`;
-                                          
+                                
+                                document.getElementById("liquid").innerHTML = `음료부족`;
                         }
                         else{
-                        document.getElementById("liquid").innerHTML = `음료부족`;
+                                document.getElementById("liquid").innerHTML = `ok`;
                         
                         
                 }
@@ -224,17 +224,22 @@
                         let name;
                         if(data.order==1)
                         {
-                                name="첫번째"
+                                name="screwdriver"
                         }
                         else if(data.order==2)
                         {
-                                name="두번째"
+                                name="sunrise"
                         }
                         else if(data.order==3)
                         {
-                                name="세번째"
+                                name="vodkacoke"
+                        }
+                        else if(data.order==3)
+                        {
+                                name="milk"
                         }
                         let newlist = document.createElement("li");
+                        
                         newlist.innerText = `주문자:${data.nickname} 주문 ${name}`;
                         waitlist.appendChild(newlist);
                         // if (orderq.length == 1) {
