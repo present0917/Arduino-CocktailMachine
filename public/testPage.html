@@ -21,13 +21,15 @@
     <div id="hidden" style="display: none;">
         <button id="stop">stop</button>
         <button id="start">start</button>
-    </div>
-
-    <section class="menu_container">
         <audio controls id="audio" muted>
             <source src='https://blog.kakaocdn.net/dn/cldlLs/btsBxWm0qHZ/rxC31KoyhkakYVpIgArnbK/beep-01a.mp3?attach=1&knm=tfile.mp3'
             type="audio/mpeg">
     </audio>
+    <div id="liquid">음료 잔량 이상 무</div>
+    </div>
+
+    <section class="menu_container">
+
 
         <div class="menu"></div>
         <div class="menu"></div>
@@ -54,12 +56,14 @@
                         if(data.value)
                         {
                             console.log("음료부족");
+                            document.getElementById("liquid").innerText="음료가 얼마 남지 않았습니다."
                         med.muted = false;
                         med.play();
                                         
                         }
                         else{       
-                       
+                            console.log("이상무");
+                            document.getElementById("liquid").innerText="음료 잔량 이상 무"
 
                         med.pause();   
                         

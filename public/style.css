@@ -4,6 +4,9 @@
     font-weight: normal;
     font-style: normal;
   }
+  #pause{
+    font-size: x-large;
+  }
 .title
 {
     display: flex;

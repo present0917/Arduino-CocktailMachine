@@ -113,18 +113,24 @@
                 socket.on('auth', function (data) {
                         console.log('관리자명령')
                         let p = document.getElementById("pause");
+                        
                         const allButtons = document.querySelectorAll('button');
+                        
                         if (data == 1) {
                                 allButtons.forEach(button => {
                                         button.disabled = true;
+                                        
                                 });
+                                
                                 p.innerText = "점검중입니다."
                                 console.log('퍼즈');
                         }
                         else {
                                 allButtons.forEach(button => {
                                         button.disabled = false;
+                                        
                                 });
+                                
                                 p.innerText = "주문가능"
                                 console.log('풀기');
                                 let q = document.getElementById("led")
@@ -192,14 +198,30 @@
                 socket.on('liquid', function (data) {
                         //서버에서 socket.emit 올때 실행됨.
                         //여기도 이벤트핸들러
+                                
+                        let p = document.getElementById("pause");
+                        const allButtons = document.querySelectorAll('button');
+                        let container=document.getElementById("menuContainer");
 
                         if(data.value)
                         {
                                 
-                                document.getElementById("liquid").innerHTML = `음료부족`;
+                                document.getElementById("liquid").innerHTML = `점검중입니다.`;
+                                allButtons.forEach(button => {
+                                        button.disabled = true;
+                                });
+                                container.style.display="none";
+                                p.innerText = "점검중입니다."
+                                console.log('퍼즈');
                         }
+                        
                         else{
-                                document.getElementById("liquid").innerHTML = `ok`;
+                                document.getElementById("liquid").innerHTML = `정상 이용 가능합니다.`;
+                                p.innerText = ""
+                                allButtons.forEach(button => {
+                                        button.disabled = false;
+                                });
+                                container.style.display="flex";
                         
                         
                 }
@@ -234,7 +256,7 @@
                         {
                                 name="vodkacoke"
                         }
-                        else if(data.order==3)
+                        else if(data.order==4)
                         {
                                 name="milk"
                         }

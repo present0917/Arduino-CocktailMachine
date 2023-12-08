@@ -68,17 +68,18 @@ void temp()
 
 void milk()
 {
-  Serial.print("cola");
+  Serial.print("milk");
   making=1;
   StartC();
-  delay(2000);
+  delay(2700);
   StopC();
-  StartD(80);
-  delay(8000);
+  StartD(88);
+  delay(20000);
   StopD();
-  Serial.println(8);
+  
   making=0;
   delay(500);
+  Serial.println(8);
 }
 
 void screw(int num) {
@@ -89,19 +90,22 @@ void screw(int num) {
   StartE();
   delay(4000);
   StopE();
+  stir();
+  stirstop();
   if(num==1)
   {
     StartF();
-    delay(500);
+    delay(200);
     StopF();
   }
   else{
 
   }
   
-  Serial.println(8);
+  
   making=0;
-  delay(500);
+  delay(1500);
+  Serial.println(8);
 }
 
 void cock() {
@@ -204,15 +208,10 @@ void loop() {
   int button = digitalRead(A1);
   if (button == LOW && making == 0) {
     Serial.print(9);  //다음거 버튼누른다.
-    delay(1000);      //없으면 너무 중복돼서 데이터가 가
+    delay(3000);      //없으면 너무 중복돼서 데이터가 가
   }
   //다음거시작
 
-  int button2 = digitalRead(A0);
-  if (button == LOW && making == 0) {
-    Serial.print(8);  //완료신호 테스트용으로 둔거
-    delay(1000);      
-  }
 
 
 
@@ -223,8 +222,7 @@ void loop() {
     if (command == '1') {
       Serial.print("screw");
        screw(0);
-       stir();
-       stirstop();
+       
     }
     else if (command == '2') {
       Serial.print("sun");
@@ -245,10 +243,11 @@ void loop() {
       delay(500);
     }
     else if (command == '6') {
-      stir();
-      delay(500);
-        stirstop();
-        Serial.print(8); 
+      Serial.print('for syrup'); 
+          StartF();
+    delay(500);
+    StopF();
+      Serial.print(8); 
     }
 
   } 
@@ -267,8 +266,8 @@ void loop() {
 }
 
 void stir(){
-  myservo.write(60);
-  delay(2000);
+  myservo.write(50);
+  delay(5000);
 }
 void stirstop(){
   myservo.write(90);
