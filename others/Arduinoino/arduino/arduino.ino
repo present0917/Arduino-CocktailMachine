@@ -49,7 +49,7 @@ void temp()
   }
   else if(h>60)
   {
-    cock();
+    coke();
     delay(500);
   }
   else if(h>40)
@@ -108,7 +108,7 @@ void screw(int num) {
   Serial.println(8);
 }
 
-void cock() {
+void coke() {
   making = 1;
   StartB();
   delay(1500);
@@ -231,7 +231,7 @@ void loop() {
     }
     else if (command == '3') {
       Serial.print("cola");
-      cock();
+      coke();
       delay(500);
     }
     else if (command == '4') {
